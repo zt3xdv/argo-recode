@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeMarkdown } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeMarkdown, getOptions } from "../../utils/utils.js";
 import Server from "./server.js";
 
 export default {
@@ -26,7 +26,7 @@ export default {
   ],
 
   async execute({ data: interaction, api }, client) {
-    const link = interaction.data.options?.find((option) => option.name === "link")?.value;
+    const { link } = getOptions(interaction);
     const code = link.match(/(?:discord(?:app)?\.com\/invite|discord\.gg)\/([^/?#]+)/i)?.[1] ?? null;
     
     if (!code) {

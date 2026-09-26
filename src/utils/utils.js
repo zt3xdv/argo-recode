@@ -1,4 +1,4 @@
-import { ComponentType, MessageFlags, Routes } from '@discordjs/core';
+import { ComponentType, MessageFlags, ApplicationCommandOptionType, Routes } from '@discordjs/core';
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
@@ -183,4 +183,49 @@ export function verifyWebhook(rawBody, signatureHeader, secret) {
 
 export function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function formatRate(rate) {
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 6,
+  }).format(rate);
+}
+
+export function getOptions(interaction) {
+  const { data } = interaction;
+  const resolved = data.resolved ?? {};
+
+  const resolve = (option) => {
+    const id = option.value;
+    switch (option.type) {
+      case ApplicationCommandOptionType.User:
+        return { user: resolved.users?.[id], member: resolved.members?.[id] };
+
+      case ApplicationCommandOptionType.Channel:
+        return resolved.channels?.[id] ?? id;
+
+      case ApplicationCommandOptionType.Role:
+        return resolved.roles?.[id] ?? id;
+
+      case ApplicationCommandOptionType.Mentionable:
+        return resolved.users?.[id] ? { user: resolved.users[id], member: resolved.members?.[id] } : resolved.roles?.[id] ?? id;
+
+      case ApplicationCommandOptionType.Attachment:
+        return resolved.attachments?.[id] ?? id;
+
+      default:
+        return option.value;
+    }
+  };
+
+  const options = (data.options ?? []).flatMap((option) => option.options ?? [option]).filter((option) => !option.options);
+  const result = Object.fromEntries(options.map((option) => [option.name, resolve(option)]));
+
+  if (data.target_id) {
+    const id = data.target_id;
+
+    result.target = resolved.users?.[id] ? { user: resolved.users[id], member: resolved.members?.[id] } : resolved.roles?.[id] ?? resolved.messages?.[id] ?? id;
+  }
+
+  return result;
 }

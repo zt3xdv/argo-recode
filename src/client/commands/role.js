@@ -25,8 +25,7 @@ export default {
   ],
 
   async execute({ data: interaction, api }, client) {
-    const roleId = interaction.data.options?.find((option) => option.name === "role")?.value;
-    const role = interaction.data.resolved.roles[roleId];
+    const { role } = getOptions(interaction);
     const colors = Object.entries(role.colors)
       .reverse()
       .filter(([, c]) => c)
