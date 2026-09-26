@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatBoolean, escapeMarkdown } from "../../utils/utils.js";
+import { getEmoji, formatBoolean, escapeMarkdown, getOptions } from "../../utils/utils.js";
 
 export default {
   name: "role",

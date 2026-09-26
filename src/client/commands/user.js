@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Resvg } from "@resvg/resvg-wasm";
 import { ApplicationCommandOptionType, ApplicationCommandType, ApplicationIntegrationType, InteractionContextType, ComponentType, MessageFlags } from "@discordjs/core";
-import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, getSnowflakeDate, truncate } from "../../utils/utils.js";
+import { getEmoji, formatDiscordDate, escapeXml, escapeMarkdown, fetchImage, getSnowflakeDate, truncate, getOptions } from "../../utils/utils.js";
 import { buildSvgBadges, getUserBadges } from "../../utils/badges.js";
 import { UserFlags } from 'discord-api-types/v10';
 
